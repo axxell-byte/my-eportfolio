@@ -1,0 +1,387 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Becoming Me — E-Portfolio</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --bg:#0f1724;
+      --card:#0b12220;
+      --muted:#9aa7bf;
+      --accent:#6ee7b7;
+      --accent-2:#7dd3fc;
+      --glass: rgba(255,255,255,0.04);
+      --radius:16px;
+      --maxw:1100px;
+      --fw-sans: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    }
+
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family:var(--fw-sans);
+      color:#e6eef8;
+      background:
+        radial-gradient(1200px 600px at 10% 10%, rgba(125,211,252,0.06), transparent 12%),
+        radial-gradient(900px 400px at 90% 90%, rgba(110,231,183,0.03), transparent 12%),
+        var(--bg);
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      line-height:1.5;
+      padding:28px;
+    }
+
+    .wrap{max-width:var(--maxw); margin:0 auto; display:grid; gap:26px}
+
+    header{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:16px;
+    }
+    .logo{
+      display:flex;
+      align-items:center;
+      gap:12px;
+    }
+    .logo .mark{
+      width:56px;height:56px;border-radius:12px;
+      background:linear-gradient(135deg,var(--accent),var(--accent-2));
+      display:flex;align-items:center;justify-content:center;font-weight:800;color:#042028;
+      box-shadow:0 6px 20px rgba(12,22,32,0.6);
+    }
+    h1.site-title{font-size:18px;margin:0}
+    .nav{
+      display:flex;
+      gap:10px;
+      align-items:center;
+      flex-wrap:wrap;
+    }
+    .nav a{
+      color:var(--muted);text-decoration:none;padding:8px 12px;border-radius:10px;font-size:14px;
+    }
+    .nav a.active, .nav a:hover{background:var(--glass); color:var(--accent-2)}
+
+    .card{
+      background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      padding:28px;border-radius:var(--radius); box-shadow:0 8px 30px rgba(2,6,23,0.6);
+    }
+
+    .cover{
+      display:grid;
+      grid-template-columns:1fr 380px;
+      gap:24px;
+      align-items:center;
+    }
+    .cover-left h2{font-size:30px;margin:0 0 8px 0}
+    .cover-left p{margin:0;color:var(--muted)}
+    .cover-meta{margin-top:18px;color:var(--muted);font-size:14px}
+
+    .cover-card{
+      border-radius:12px; padding:18px;
+      background:linear-gradient(135deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      display:flex;flex-direction:column;gap:10px;align-items:center;justify-content:center;min-height:220px;
+      transform:translateY(10px); opacity:0;
+      transition:all .7s cubic-bezier(.2,.9,.25,1);
+    }
+    .cover-card.show{transform:none;opacity:1}
+
+    .profile-photo{
+      width:120px;height:120px;border-radius:12px;
+      overflow:hidden;
+      border:1px solid rgba(255,255,255,0.06);
+      box-shadow:0 4px 18px rgba(0,0,0,0.6);
+    }
+    .profile-photo img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      display:block;
+    }
+
+    .cover-actions{display:flex;gap:10px;margin-top:10px}
+    .btn{
+      background:transparent;border:1px solid rgba(255,255,255,0.06);
+      padding:8px 12px;border-radius:10px;color:var(--muted);
+      cursor:pointer;font-weight:600;
+    }
+
+    section.page{display:grid;grid-template-columns:1fr 340px;gap:22px;align-items:start}
+    section.page.reverse{grid-template-columns:340px 1fr}
+    .page-main{padding:16px;border-radius:12px;background:rgba(255,255,255,0.02)}
+    .page-side{padding:16px;border-radius:12px;background:rgba(255,255,255,0.02)}
+
+    h2.section-title{margin:0 0 10px 0;font-size:20px}
+    p.lead{margin-top:6px;color:var(--muted)}
+
+    .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}
+    .mini-card{padding:12px;border-radius:10px;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.02)}
+
+    .key-list{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+    .badge{padding:6px 10px;border-radius:999px;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.02);font-size:13px;color:var(--muted)}
+
+    .timeline{position:relative;padding-left:18px;margin-top:8px}
+    .timeline:before{
+      content:"";position:absolute;left:8px;top:0;bottom:0;width:3px;
+      background:linear-gradient(180deg,var(--accent),var(--accent-2));
+      border-radius:3px;opacity:0.9;
+      transform:scaleY(0); transform-origin:top;
+      transition:transform .9s cubic-bezier(.2,.9,.25,1);
+    }
+    .timeline.show:before{transform:scaleY(1)}
+
+    .timeline-item{
+      position:relative;padding:14px 12px;margin-bottom:10px;
+      border-radius:10px;background:rgba(255,255,255,0.01);
+      border:1px solid rgba(255,255,255,0.02)
+    }
+    .timeline-item .dot{
+      position:absolute;left:-25px;top:18px;width:18px;height:18px;
+      border-radius:50%;background:var(--card);border:4px solid var(--accent)
+    }
+
+    .reflection{padding:16px;border-radius:12px;background:rgba(255,255,255,0.02)}
+
+    @media (max-width:880px){
+      .cover{grid-template-columns:1fr}
+      section.page, section.page.reverse{grid-template-columns:1fr}
+      .page-side{order:2}
+    }
+
+    .fade-in{opacity:0;transform:translateY(8px);transition:all .7s cubic-bezier(.2,.9,.25,1)}
+    .fade-in.show{opacity:1;transform:none}
+
+    .float{animation:float 6s ease-in-out infinite;}
+    @keyframes float{
+      0%{transform:translateY(0)}
+      50%{transform:translateY(-6px)}
+      100%{transform:translateY(0)}
+    }
+
+    @media print{
+      body{background:#fff;color:#000}
+      header, .nav, .btn{display:none}
+      .wrap{max-width:100%}
+      .page-side{display:none}
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+
+    <header>
+      <div class="logo">
+        <div class="mark">BM</div>
+        <div>
+          <h1 class="site-title">Becoming Me — E-Portfolio</h1>
+          <div class="muted" style="font-size:13px">Personal Development | MAWD/CUART-12</div>
+        </div>
+      </div>
+
+      <nav class="nav">
+        <a href="#cover" class="nav-link active">Cover</a>
+        <a href="#who-was">Who Was I</a>
+        <a href="#who-am">Who Am I</a>
+        <a href="#who-want">Who Do I Want To Be</a>
+        <a href="#timeline">Timeline</a>
+        <a href="#reflection">Reflection</a>
+      </nav>
+    </header>
+
+    <!-- COVER -->
+    <main class="card cover" id="cover">
+      <div class="cover-left">
+        <h2>Becoming Me: A Personal Development E-Portfolio</h2>
+        <p class="lead">A record of my personal growth, reflections, and goals from this course. This portfolio highlights who I was, who I am now, and who I want to become.</p>
+
+        <div class="cover-meta">
+          <div><strong>Name:</strong> Gian H. Ruedas</div>
+          <div><strong>Grade & Section:</strong> Grade 12 - MAWD/CUART</div>
+          <div><strong>Date:</strong> November 30, 2025</div>
+        </div>
+      </div>
+
+      <aside class="cover-card" id="cover-card">
+
+        <div class="profile-photo" id="profile-photo">
+          <img src="profile.jpg" alt="Profile Photo">
+        </div>
+
+        <div style="text-align:center">
+          <div style="font-weight:700">Gian Ruedas</div>
+          <div class="muted" style="font-size:13px">Student • Personal Development</div>
+        </div>
+
+        <div class="cover-actions">
+          <button class="btn" onclick="scrollToSection('who-was')">Start Reading</button>
+          <button class="btn" onclick="scrollToSection('timeline')">View Timeline</button>
+        </div>
+      </aside>
+    </main>
+
+    <!-- intro -->
+    <section class="card page" id="intro">
+      <div class="page-main fade-in">
+        <h2 class="section-title">Introduction About Myself</h2>
+        <p class="lead">Hello I'm <strong>Gian Ruedas</strong>. I’m currently studying at STI College Iligan, and I live in Upper Hinaplanon, Iligan City. I’ve always been someone who learns by doing. Ever since I was a kid, I’ve loved exploring technology, coding, and creating things on my own. I’m not a professional yet, but I’ve been programming since I was six, and that curiosity still guides me today.</p>
+      </div>
+
+      <aside class="page-side">
+        <h3 style="margin:0 0 8px 0">Quick Facts</h3>
+        <div class="key-list">
+          <div class="badge">Hobbies: Coding</div>
+          <div class="badge">Strength: Curiosity</div>
+          <div class="badge">Goal: To create something that will change the world</div>
+          <div class="badge">Values: Family, Friends, Honesty</div>
+        </div>
+      </aside>
+    </section>
+
+    <!-- WHO WAS I -->
+    <section class="card page reverse" id="who-was">
+      <div class="page-side">
+        <h3>Photos & Past Works</h3>
+        <div style="display:grid;gap:8px">
+          <button class="mini-card btn" onclick="scrollToSection('activities')">Activities</button>
+          <button class="mini-card btn" onclick="scrollToSection('more-about')">More About Myself</button>
+        </div>
+      </div>
+
+      <div class="page-main fade-in">
+        <h2 class="section-title">Who Was I?</h2>
+        <p class="lead">Growing up, I wasn’t the most outgoing kid. I spent a lot of time on my own, and I often felt like I didn’t fit in. While others had groups of friends, I mostly had my own little world, and at first, I didn’t really know where I belonged.
+
+            But everything changed when I discovered game development.
+            Creating games became more than a hobby, it became an escape, a comfort, and eventually the thing that made me feel excited about the future. Building worlds, designing mechanics, and coding gave me direction when I didn’t have much else. It became the place where I felt confident, creative, and in control.
+            
+            Those quiet years shaped me. They taught me to be independent, to learn on my own, and to use creativity as a strength. And that’s the foundation of who I am today.</p>
+      </div>
+    </section>
+
+<!-- ACTIVITIES -->
+<section class="card page" id="activities">
+    <div class="page-main fade-in">
+      <h2 class="section-title">Activities</h2>
+      <p class="lead">These activities showcase my journey of learning and creating. Each project reflects my curiosity, problem solving skills, and dedication to improving myself. Through hands on experiences, I’ve explored new ideas, challenged my limits, and discovered the value of persistence. They represent not just accomplishments, but lessons that guide me toward my goals and future growth.</p>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-top:12px">
+        <div class="mini-card">
+          <img src="project1.jpg" alt="Project 1" style="width:100%;border-radius:10px">
+        </div>
+        <div class="mini-card">
+          <img src="project2.jpg" alt="Project 2" style="width:100%;border-radius:10px">
+        </div>
+        <!-- Add more images as needed -->
+      </div>
+    </div>
+    <aside class="page-side"></aside>
+  </section>
+
+    <!-- MORE ABOUT MYSELF -->
+    <section class="card page" id="more-about">
+      <div class="page-main fade-in">
+        <h2 class="section-title">More About Myself</h2>
+        <div style="display:grid;gap:12px;margin-top:12px">
+          <div class="mini-card">
+            <img src="art1.jpg" alt="Artwork 1" style="width:50%;border-radius:10px">
+          </div>
+          <div class="mini-card">
+            <img src="art2.jpg" alt="Artwork 2" style="width:50%;border-radius:10px">
+          </div>
+          <div class="mini-card">
+            <img src="art3.jpg" alt="Artwork 2" style="width:50%;border-radius:10px">
+          </div>
+          <div class="mini-card">
+            <img src="art4.jpg" alt="Artwork 2" style="width:50%;border-radius:10px">
+          </div>
+        </div>
+      </div>
+      <aside class="page-side"></aside>
+    </section>
+
+    <!-- WHO AM I -->
+    <section class="card page" id="who-am">
+      <div class="page-main fade-in">
+        <h2 class="section-title">Who Am I?</h2>
+        <p class="lead">Today, I’m someone who finds joy in creating and exploring. I’m still learning, still experimenting, and still pushing myself to grow every day. Programming and game development are not just hobbies they are how I challenge myself, express my ideas, and bring my imagination to life.
+
+            I’m curious, independent, and driven by the desire to improve. Even though I’m still young and have a lot to learn, I’m proud of the projects I’ve built, the skills I’ve developed, and the passion that keeps me moving forward.</p>
+      </div>
+      <aside class="page-side"></aside>
+    </section>
+
+    <!-- WHO I WANT TO BE -->
+    <section class="card page reverse" id="who-want">
+      <div class="page-side"></div>
+      <div class="page-main fade-in">
+        <h2 class="section-title">Who Do I Want To Be?</h2>
+        <p class="lead"><p class="lead">I want to become someone who continuously grows, meets my own expectations, and earns respect from myself and from others. I strive to live with discipline, integrity, and purpose. Most importantly, I want to create meaningful things projects, ideas, or innovations that can make a real difference and help change the world for the better.</p>
+      </div>
+    </section>
+
+    <!-- timeline -->
+    <section class="card" id="timeline">
+      <h2 class="section-title">My Growth Timeline</h2>
+      <div class="timeline" id="timeline-list">
+        <div class="timeline-item"><div class="dot"></div>Kindergarten — Even as a quiet, loner kid, I was already fascinated by creating. I would imagine and design things entirely in my mind, exploring ideas and worlds without writing them down. That early curiosity sparked my love for making and imagining.</div>
+        <div class="timeline-item"><div class="dot"></div>Elementary — This is when I started turning imagination into action. I began planning and creating simple games just for fun, experimenting with coding and game mechanics. Those first attempts taught me the joy of building something from nothing.</div>
+        <div class="timeline-item"><div class="dot"></div>High School — By now, I had discovered my true passion for programming and game development. I spent more time creating, learning, and improving my skills. Even while facing challenges in life and social interactions, I found purpose and direction through my projects.</div>
+        <div class="timeline-item"><div class="dot"></div>Senior High School — The journey became more serious as I began thinking about my future and career path. Choosing my path was daunting at first, but I embraced the challenge, grew more disciplined, confident, and focused, and continued building meaningful connections. Today, I’m proud of how far I’ve come, both in my skills and in my relationships.</div>
+      </div>
+    </section>
+
+    <!-- reflection -->
+    <section class="card reflection" id="reflection">
+      <h2 class="section-title">Concluding Reflection</h2>
+      <p>Looking back at my journey, I realize how much I have grown not just in skills, but in understanding myself and my passions. From a quiet, imaginative child to someone who has made many friends and found connection, my life as a loner has transformed. Each stage of my life has taught me resilience, independence, and the value of persistence. My love for game development and programming has been more than a hobby; it has been a guiding force, shaping who I am and who I aspire to be. As I continue to learn and face new challenges, I carry with me the lessons of my past, the curiosity of my present, and the ambition to make a positive impact in the future.</p>
+    </section>
+
+    <footer style="text-align:center;color:var(--muted);font-size:13px;padding:16px 0">
+      © Becoming Me • E-Portfolio
+    </footer>
+
+  </div>
+
+  <script>
+    document.querySelectorAll('.nav a').forEach(a => {
+      a.addEventListener('click', e => {
+        e.preventDefault();
+        document.querySelectorAll('.nav a').forEach(x => x.classList.remove('active'));
+        a.classList.add('active');
+        const id = a.getAttribute('href').slice(1);
+        document.getElementById(id).scrollIntoView({behavior:'smooth'});
+      });
+    });
+
+    function reveal(){
+      const fadeIns = document.querySelectorAll('.fade-in');
+      const coverCard = document.getElementById('cover-card');
+      const timeline = document.getElementById('timeline-list');
+      const showOffset = window.innerHeight * 0.9;
+
+      fadeIns.forEach(el=>{
+        const r = el.getBoundingClientRect();
+        if(r.top < showOffset) el.classList.add('show');
+      });
+
+      if(coverCard.getBoundingClientRect().top < showOffset)
+        coverCard.classList.add('show');
+
+      if(timeline.getBoundingClientRect().top < showOffset)
+        timeline.classList.add('show');
+    }
+    window.addEventListener('scroll', reveal);
+    window.addEventListener('load', reveal);
+
+    document.getElementById('profile-photo').classList.add('float');
+
+    function scrollToSection(id){
+      document.getElementById(id).scrollIntoView({behavior:'smooth'});
+    }
+  </script>
+</body>
+</html>
